@@ -3,578 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I'm Sorry, Simran ❤️</title>
-    <!-- FontAwesome Icons & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
-    <!-- Canvas Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+    <title>Call Break Scoreboard</title>
     <style>
-        :root {
-            --bg-color: #ffe6ea;
-            --card-bg: #ffffff;
-            --text-color: #4a4a4a;
-            --primary-color: #ff4d6d;
-            --secondary-color: #ff758f;
-            --accent-color: #c9184a;
-        }
-
-        body.dark-mode {
-            --bg-color: #1a0813;
-            --card-bg: #2d1222;
-            --text-color: #f8edeb;
-            --primary-color: #ff4d6d;
-            --secondary-color: #ff758f;
-            --accent-color: #ff8fa3;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background 0.3s, color 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            position: relative;
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* 29. Night/Day Mode Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        h1 {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            max-width: 1000px;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        section {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        /* Player Setup Screen */
+        .setup-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #38bdf8;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #0284c7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0369a1;
+        }
+
+        .btn-success {
+            background-color: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Main Game Screen */
+        .game-section {
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Score Table Style */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #334155;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-size: 1.4rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1e293b;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #0f172a;
+        }
+
+        .total-row {
+            background-color: #0369a1 !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Round Input Section */
+        .round-input-container {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .round-input-container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #facc15;
             text-align: center;
         }
 
-        h1, h2, h3 {
-            color: var(--primary-color);
-        }
-
-        .handwritten {
-            font-family: 'Sacramento', cursive;
-            font-size: 2.5rem;
-        }
-
-        /* 1. Interactive Hero Banner */
-        .hero {
-            position: relative;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 80px 20px;
-            border-radius: 20px;
-        }
-
-        .hero h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-        /* 2. Typewriter Effect */
-        .typewriter {
-            font-size: 1.2rem;
-            border-right: 2px solid #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            margin: 0 auto;
-            max-width: fit-content;
-            animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
-        }
-
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #fff; } }
-
-        /* Buttons */
-        .btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-        }
-        .btn:hover { transform: translateY(-2px); }
-
-        /* 4. Countdown Timer */
-        .timer-grid {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .timer-box {
-            background: var(--bg-color);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 70px;
-        }
-
-        /* 6. Reasons Flip Cards */
-        .cards-grid {
+        .inputs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
-        .flip-card {
-            height: 120px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
+
+        .player-score-input {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        .flip-card-front { background: var(--secondary-color); color: white; }
-        .flip-card-back { background: var(--accent-color); color: white; transform: rotateY(180deg); }
-
-        /* 8. Interactive Timeline */
-        .timeline {
-            border-left: 3px solid var(--primary-color);
-            margin: 20px 0 20px 20px;
-            text-align: left;
-            padding-left: 20px;
-        }
-        .timeline-item { margin-bottom: 20px; position: relative; }
-        .timeline-item::before {
-            content: '❤️';
-            position: absolute;
-            left: -33px;
-            top: 0;
+            flex-direction: column;
+            gap: 8px;
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 8px;
         }
 
-        /* 9. Photo Gallery */
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-        .polaroid {
-            background: white;
-            padding: 10px 10px 25px 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transform: rotate(-2deg);
-            width: 180px;
-            color: #333;
-        }
-        .polaroid:nth-child(even) { transform: rotate(3deg); }
-        .polaroid img { width: 100%; height: 140px; object-fit: cover; }
-
-        /* 11. Forgive Me Buttons */
-        .forgive-container {
-            position: relative;
-            min-height: 100px;
-        }
-        #noBtn { position: absolute; }
-
-        /* 13. Digital Scratch Card */
-        .scratch-container {
-            position: relative;
-            width: 250px;
-            height: 100px;
-            margin: 0 auto;
-        }
-        #scratchCanvas {
-            position: absolute;
-            top: 0; left: 0;
-            cursor: pointer;
-        }
-        .scratch-secret {
-            width: 100%; height: 100%;
-            background: #ffe6eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .player-score-input label {
+            color: #fff;
             font-weight: bold;
-            color: var(--accent-color);
-            border-radius: 10px;
         }
 
-        /* Floating Hearts Animation */
-        .heart-float {
-            position: fixed;
-            color: var(--primary-color);
-            font-size: 20px;
-            animation: floatUp 4s linear infinite;
-            pointer-events: none;
-            z-index: 999;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
-
-        /* Coupon Styling */
-        .coupon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-        .coupon {
-            border: 2px dashed var(--primary-color);
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(255, 77, 109, 0.05);
-        }
-
-        /* 28. Live Emoji Reactions */
-        .reactions-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--card-bg);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        .controls {
             display: flex;
+            justify-content: space-between;
             gap: 15px;
-            font-size: 1.5rem;
-            z-index: 999;
+            flex-wrap: wrap;
         }
-        .reactions-bar span { cursor: pointer; transition: transform 0.2s; }
-        .reactions-bar span:hover { transform: scale(1.3); }
 
-        input[type="range"] { accent-color: var(--primary-color); width: 80%; }
+        /* Display Mode Toggle for Large Screen View */
+        .score-big {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        .score-negative {
+            color: #f87171;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            th, td { padding: 8px; font-size: 1rem; }
+            .total-row { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 29. Theme Toggle Button -->
-    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i> Mode</button>
-
-    <!-- 3. Background Music (Auto-plays if user interacts) -->
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-    </audio>
+    <h1>♠️ Call Break Scoreboard ♠️</h1>
 
     <div class="container">
-
-        <!-- 1. Hero Banner & 2. Typewriter -->
-        <section class="hero">
-            <h1 class="handwritten" style="font-size: 4rem;">I'm Really Sorry, Simran</h1>
-            <div class="typewriter">Every second without talking to you feels like a year...</div>
-            <br>
-            <button class="btn" onclick="playMusic()"><i class="fas fa-music"></i> Play Music For You</button>
-        </section>
-
-        <!-- 5. Voice Note & 22. Voice Note Player -->
-        <section>
-            <h2><i class="fas fa-microphone-alt"></i> A Special Audio Note</h2>
-            <p>Suna na Simran, aafno aawaz ma euta chotto message:</p><br>
-            <audio controls style="width: 80%;">
-                <source src="" type="audio/mp3">
-                Your browser does not support audio elements.
-            </audio>
-        </section>
-
-        <!-- 4. Time Counter -->
-        <section>
-            <h2><i class="fas fa-clock"></i> Time Since We First Met</h2>
-            <div class="timer-grid">
-                <div class="timer-box"><h3 id="days">00</h3>Days</div>
-                <div class="timer-box"><h3 id="hours">00</h3>Hours</div>
-                <div class="timer-box"><h3 id="mins">00</h3>Mins</div>
-                <div class="timer-box"><h3 id="secs">00</h3>Secs</div>
+        <!-- Step 1: Player Name Entry -->
+        <div id="setupSection" class="setup-section">
+            <h2 style="text-align: center; color: #38bdf8; margin-bottom: 10px;">Player Names Entry</h2>
+            <div class="input-group">
+                <label>Player 1 Name:</label>
+                <input type="text" id="p1" value="Player 1">
             </div>
-        </section>
-
-        <!-- 7. What Went Wrong & My Promise -->
-        <section style="text-align: left;">
-            <h2 style="text-align: center;"><i class="fas fa-heart-broken"></i> My Realization & Promise</h2>
-            <p style="margin-top: 10px;"><strong>What I Realized:</strong> Malai thaha chha maile garnu nahune galti gare. Timro dimag ra maan dukhaye...</p>
-            <p style="margin-top: 10px;"><strong>My Promise to Simran:</strong> Aagami din ma ma yasto galti dohoryaune chhainam. Timlai sadhai respect ra maya garnechhu.</p>
-        </section>
-
-        <!-- 6. 10 Reasons Flip Cards & 10. Things I Love -->
-        <section>
-            <h2><i class="fas fa-star"></i> 6 Reasons Why You Mean Everything</h2>
-            <p style="font-size: 0.9rem; color: #777;">(Hover/Tap on the cards)</p>
-            <div class="cards-grid">
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 1</div><div class="flip-card-back">Timro pyaaro muskaan! 😊</div></div></div>
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 2</div><div class="flip-card-back">Timro aatmiyata ra maya ❤️</div></div></div>
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 3</div><div class="flip-card-back">Mero kura bujhne bani 🥺</div></div></div>
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 4</div><div class="flip-card-back">Timro Care garne styles 🥰</div></div></div>
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 5</div><div class="flip-card-back">Timle garne Sweet ris 🙈</div></div></div>
-                <div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">Reason 6</div><div class="flip-card-back">You are One in a Million 💎</div></div></div>
+            <div class="input-group">
+                <label>Player 2 Name:</label>
+                <input type="text" id="p2" value="Player 2">
             </div>
-        </section>
-
-        <!-- 8. Interactive Timeline -->
-        <section>
-            <h2><i class="fas fa-history"></i> Our Beautiful Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item"><h4>First Conversation</h4><p>Tyo din jab hami le pahilo choti kura gareka thiyau.</p></div>
-                <div class="timeline-item"><h4>First Date</h4><p>Jab timile mero aakha ma aaera hereki thiyau.</p></div>
-                <div class="timeline-item"><h4>Best Memories</h4><p>Halka jhagada ra dherai maya ka palharu...</p></div>
+            <div class="input-group">
+                <label>Player 3 Name:</label>
+                <input type="text" id="p3" value="Player 3">
             </div>
-        </section>
-
-        <!-- 9. Memory Photo Gallery -->
-        <section>
-            <h2><i class="fas fa-images"></i> Memory Wall</h2>
-            <div class="gallery">
-                <div class="polaroid"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400" alt="Memory"><p class="handwritten">Cute Moment</p></div>
-                <div class="polaroid"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" alt="Memory"><p class="handwritten">Happiness</p></div>
-                <div class="polaroid"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400" alt="Memory"><p class="handwritten">Together</p></div>
+            <div class="input-group">
+                <label>Player 4 Name:</label>
+                <input type="text" id="p4" value="Player 4">
             </div>
-        </section>
+            <button class="btn btn-primary" onclick="startGame()" style="margin-top: 15px;">Game Start Garna</button>
+        </div>
 
-        <!-- 12. Love Gauge & 25. Hugs/Kisses Counter -->
-        <section>
-            <h2><i class="fas fa-tachometer-alt"></i> Apology & Love Meter</h2>
-            <input type="range" min="0" max="1000" value="1000" disabled><br>
-            <p style="margin-top: 10px;">Love Status: <strong style="color:var(--primary-color);">1000% INFINITE</strong></p>
-            <br><hr><br>
-            <h3>Send Virtual Hugs/Kisses</h3>
-            <button class="btn" onclick="addHug()"><i class="fas fa-heart"></i> Hug Simran</button>
-            <p>Total Virtual Hugs Sent: <span id="hugCount" style="font-weight: bold; font-size: 1.2rem;">0</span></p>
-        </section>
+        <!-- Step 2: Main Game Dashboard -->
+        <div id="gameSection" class="game-section">
+            
+            <!-- Round Input Form -->
+            <div class="round-input-container">
+                <h2 id="roundTitle">Round 1 Score Entry</h2>
+                
+                <div class="inputs-grid" id="inputFields">
+                    <!-- Dynamic inputs generated here -->
+                </div>
 
-        <!-- 13. Digital Scratch Card -->
-        <section>
-            <h2><i class="fas fa-gift"></i> Scratch for a Secret Message</h2>
-            <div class="scratch-container">
-                <div class="scratch-secret">Simran, Timi Mero Life Hau! ❤️</div>
-                <canvas id="scratchCanvas" width="250" height="100"></canvas>
+                <button class="btn btn-success" style="width: 100%;" onclick="addRoundScore()">Score Save Garna</button>
             </div>
-        </section>
 
-        <!-- 14. Custom Quiz -->
-        <section>
-            <h2><i class="fas fa-question-circle"></i> Quick Love Quiz</h2>
-            <p>Who loves Simran the most in the world?</p><br>
-            <button class="btn" onclick="alert('Correct Answer! Auta matra manchhe chha, tyo ma hu! ❤️')">Option A: Me</button>
-            <button class="btn" onclick="alert('Correct Answer! Auta matra manchhe chha, tyo ma hu! ❤️')">Option B: Definitely Me</button>
-        </section>
-
-        <!-- 15. Virtual Gift Box -->
-        <section>
-            <h2><i class="fas fa-box-open"></i> Surprise Gift Box</h2>
-            <button class="btn" onclick="triggerConfetti()"><i class="fas fa-gift"></i> Open Gift Box</button>
-        </section>
-
-        <!-- 16. Redeemable Coupons & 17. Bucket List -->
-        <section>
-            <h2><i class="fas fa-ticket-alt"></i> Special Apology Vouchers for Simran</h2>
-            <div class="coupon-grid">
-                <div class="coupon"><h3>🍦 Unlimited Ice Cream</h3><p>Valid Anytime</p><button class="btn" onclick="alert('Redeemed!')">Redeem</button></div>
-                <div class="coupon"><h3>🚫 No Arguments Day</h3><p>Valid For 24 Hours</p><button class="btn" onclick="alert('Redeemed!')">Redeem</button></div>
-                <div class="coupon"><h3>🍕 Movie & Pizza Date</h3><p>My Treat!</p><button class="btn" onclick="alert('Redeemed!')">Redeem</button></div>
+            <!-- Scoreboard Table -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr id="tableHeader">
+                            <th>Round</th>
+                            <!-- Player names will go here -->
+                        </tr>
+                    </thead>
+                    <tbody id="scoreTableBody">
+                        <!-- Round scores will go here -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row" id="totalRow">
+                            <td>TOTAL</td>
+                            <!-- Total scores will go here -->
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-        </section>
 
-        <!-- 18. Interactive Love Letter & 19. Password Note -->
-        <section>
-            <h2><i class="fas fa-envelope-open-text"></i> Secret Password Protected Letter</h2>
-            <p>Enter the secret code (Hint: 1234) to unlock:</p><br>
-            <input type="password" id="passInput" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            <button class="btn" onclick="unlockLetter()">Unlock</button>
-            <div id="secretLetter" style="display:none; margin-top:20px; text-align: left; background: #fff3f5; padding: 15px; border-radius: 10px;">
-                <p class="handwritten" style="font-size: 1.8rem;">Pyaari Simran,</p>
-                <p>Timi bina mero din bilkul adhuro chha. Maile gareko galti maile swikar gareko chhu. Plz malai maaf gardeu hai! I promise to always keep you happy.</p>
+            <!-- Controls (Again Play & Reset) -->
+            <div class="controls">
+                <button class="btn btn-danger" onclick="resetGame()">Again Play (Restart Game)</button>
             </div>
-        </section>
 
-        <!-- 20. Daily Compliment Generator -->
-        <section>
-            <h2><i class="fas fa-magic"></i> Simran's Daily Compliment</h2>
-            <p id="complimentText" style="font-size: 1.2rem; margin: 15px 0; font-weight: 600;">Click the button below!</p>
-            <button class="btn" onclick="generateCompliment()"><i class="fas fa-sparkles"></i> Get Compliment</button>
-        </section>
-
-        <!-- 23. Spotify Playlist & 24. Infographics -->
-        <section>
-            <h2><i class="fab fa-spotify"></i> Dedicated Playlist & Facts</h2>
-            <p>Simran is 100% Cute, 100% Caring, and 100% Mine ❤️</p><br>
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </section>
-
-        <!-- 27. Video Montage -->
-        <section>
-            <h2><i class="fas fa-video"></i> Video Montage</h2>
-            <div style="position:relative;padding-top:56.25%;">
-                <iframe src="https://www.youtube.com/embed/g4kKzS-yX6s" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:15px;" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </section>
-
-        <!-- 11. Forgive Me Buttons (Interactive No Button) -->
-        <section class="forgive-container">
-            <h2>Simran, Will You Forgive Me? 🥺</h2><br>
-            <button class="btn" style="font-size: 1.5rem; padding: 15px 40px;" onclick="forgiven()">YES! ❤️</button>
-            <button class="btn" id="noBtn" onmouseover="moveNoButton()" style="background: #6c757d;">No 😜</button>
-        </section>
-
-        <!-- 26. Instant WhatsApp Trigger & 30. Final Surprise -->
-        <section>
-            <h2><i class="fab fa-whatsapp"></i> Ready to Talk?</h2>
-            <p>Clicking below will send me a message directly!</p><br>
-            <a href="https://wa.me/?text=I%20forgive%20you%20❤️" target="_blank" class="btn" style="background:#25D366;"><i class="fab fa-whatsapp"></i> Forgive on WhatsApp</a>
-            <br><br>
-            <p style="color: var(--accent-color); font-weight: bold;">🎁 Final Surprise: Now check your door/phone for real chocolates & flowers!</p>
-        </section>
-
-    </div>
-
-    <!-- 28. Live Emoji Reactions Floating Bar -->
-    <div class="reactions-bar">
-        <span onclick="sendEmoji('🥺')">🥺</span>
-        <span onclick="sendEmoji('❤️')">❤️</span>
-        <span onclick="sendEmoji('😭')">😭</span>
-        <span onclick="sendEmoji('🌹')">🌹</span>
+        </div>
     </div>
 
     <script>
-        // 21. Floating Hearts Effect
-        setInterval(() => {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-float');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 4000);
-        }, 500);
+        let players = [];
+        let currentRound = 1;
+        let scores = []; // Array to store round-wise scores for each player
+        let totals = [0, 0, 0, 0];
 
-        // 3. Audio Control
-        function playMusic() {
-            document.getElementById('bgMusic').play();
-            alert("Playing music for Simran ❤️");
+        function startGame() {
+            const p1 = document.getElementById('p1').value.trim() || 'Player 1';
+            const p2 = document.getElementById('p2').value.trim() || 'Player 2';
+            const p3 = document.getElementById('p3').value.trim() || 'Player 3';
+            const p4 = document.getElementById('p4').value.trim() || 'Player 4';
+
+            players = [p1, p2, p3, p4];
+
+            // Render Table Headers
+            const headerRow = document.getElementById('tableHeader');
+            headerRow.innerHTML = '<th>Round</th>';
+            players.forEach(name => {
+                headerRow.innerHTML += `<th>${name}</th>`;
+            });
+
+            // Show input form for the current round
+            renderInputFields();
+
+            // Render initial total row
+            updateTotalRow();
+
+            // Toggle screens
+            document.getElementById('setupSection').style.display = 'none';
+            document.getElementById('gameSection').style.display = 'flex';
         }
 
-        // 4. Timer Logic
-        const startDate = new Date('2023-01-01T00:00:00'); 
-        setInterval(() => {
-            const diff = new Date() - startDate;
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            document.getElementById('mins').innerText = Math.floor((diff / 1000 / 60) % 60);
-            document.getElementById('secs').innerText = Math.floor((diff / 1000) % 60);
-        }, 1000);
+        function renderInputFields() {
+            document.getElementById('roundTitle').innerText = `Round ${currentRound} Score Entry`;
+            const container = document.getElementById('inputFields');
+            container.innerHTML = '';
 
-        // 11. Runaway No Button
-        function moveNoButton() {
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            const btn = document.getElementById('noBtn');
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+            players.forEach((player, index) => {
+                container.innerHTML += `
+                    <div class="player-score-input">
+                        <label>${player}</label>
+                        <input type="number" id="call_${index}" placeholder="Call (Bid)" min="1" max="13" style="margin-bottom: 5px;">
+                        <input type="number" id="made_${index}" placeholder="Hands Made" min="0" max="13">
+                    </div>
+                `;
+            });
         }
 
-        function forgiven() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            alert("THANK YOU SIMRAN! ❤️ I love you so much!");
-        }
+        function addRoundScore() {
+            let roundScores = [];
 
-        // 13. Scratch Card Logic
-        const canvas = document.getElementById('scratchCanvas');
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#b5b5b5';
-        ctx.fillRect(0, 0, 250, 100);
-        let isDrawing = false;
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            ctx.clearRect(e.clientX - rect.left - 10, e.clientY - rect.top - 10, 20, 20);
-        });
+            for (let i = 0; i < 4; i++) {
+                const callVal = parseFloat(document.getElementById(`call_${i}`).value);
+                const madeVal = parseFloat(document.getElementById(`made_${i}`).value);
 
-        // 15. Confetti Gift
-        function triggerConfetti() {
-            confetti({ particleCount: 100, spread: 60 });
-            alert("🎁 Surprise! Lots of love and virtual flowers for you!");
-        }
+                if (isNaN(callVal) || isNaN(madeVal)) {
+                    alert('Kripaya sabai khiladi ko Call ra Made hands entry garnuhos!');
+                    return;
+                }
 
-        // 19. Unlock Secret Letter
-        function unlockLetter() {
-            const pass = document.getElementById('passInput').value;
-            if(pass === "1234") {
-                document.getElementById('secretLetter').style.display = 'block';
-            } else {
-                alert("Wrong Code! Hint is 1234");
+                let score = 0;
+
+                // Call break rule logic
+                if (madeVal < callVal) {
+                    // Minus score if hands made is less than call
+                    score = -callVal;
+                } else {
+                    // Full call score + 0.1 for each extra hand
+                    score = callVal + ((madeVal - callVal) * 0.1);
+                }
+
+                // Round to 1 decimal place to avoid floating point issues
+                score = Math.round(score * 10) / 10;
+
+                roundScores.push(score);
+                totals[i] += score;
+                totals[i] = Math.round(totals[i] * 10) / 10;
             }
+
+            // Save to history
+            scores.push(roundScores);
+
+            // Add row to table
+            const tbody = document.getElementById('scoreTableBody');
+            const row = document.createElement('tr');
+            
+            let rowContent = `<td><strong>R${currentRound}</strong></td>`;
+            roundScores.forEach(s => {
+                const scoreClass = s < 0 ? 'score-negative' : '';
+                rowContent += `<td class="${scoreClass}">${s > 0 ? '+' + s : s}</td>`;
+            });
+
+            row.innerHTML = rowContent;
+            tbody.appendChild(row);
+
+            // Update Total
+            updateTotalRow();
+
+            // Increment Round
+            currentRound++;
+            renderInputFields();
         }
 
-        // 20. Compliment Generator
-        const compliments = [
-            "Simran ko muskaan le mero din banchha! ❤️",
-            "Timi sansar kai sab bhanda pyaari manchhe hau! 🥰",
-            "Timro aakha haru dherai ramro chha! ✨",
-            "Timi risauda pani dherai cute dekhinchhou! 🙈"
-        ];
-        function generateCompliment() {
-            const random = compliments[Math.floor(Math.random() * compliments.length)];
-            document.getElementById('complimentText').innerText = random;
+        function updateTotalRow() {
+            const totalRow = document.getElementById('totalRow');
+            let content = '<td>TOTAL</td>';
+            totals.forEach(t => {
+                const scoreClass = t < 0 ? 'score-negative' : '';
+                content += `<td class="score-big ${scoreClass}">${t}</td>`;
+            });
+            totalRow.innerHTML = content;
         }
 
-        // 25. Hug Counter
-        let count = 0;
-        function addHug() {
-            count++;
-            document.getElementById('hugCount').innerText = count;
-            confetti({ particleCount: 20 });
-        }
+        function resetGame() {
+            if (confirm("Kyu tapai game feri naya bata shuru (Restart) garna chhanhunu hunchha?")) {
+                currentRound = 1;
+                scores = [];
+                totals = [0, 0, 0, 0];
 
-        // 28. Live Reactions
-        function sendEmoji(emoji) {
-            alert("You reacted with " + emoji + " ❤️");
-            confetti({ particleCount: 30 });
-        }
-
-        // 29. Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
+                document.getElementById('scoreTableBody').innerHTML = '';
+                document.getElementById('setupSection').style.display = 'flex';
+                document.getElementById('gameSection').style.display = 'none';
+            }
         }
     </script>
 </body>
