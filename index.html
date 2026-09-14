@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Call Break Scoreboard</title>
+    <title>Call Break Professional Scoreboard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -40,7 +40,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        /* Player Setup Screen */
+        /* Forms Setup */
         .setup-section {
             display: flex;
             flex-direction: column;
@@ -66,9 +66,10 @@
             border: 2px solid #334155;
             background: #0f172a;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             outline: none;
             transition: border-color 0.3s;
+            text-align: center;
         }
 
         input[type="text"]:focus, input[type="number"]:focus {
@@ -76,7 +77,7 @@
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 14px 20px;
             font-size: 1.2rem;
             font-weight: bold;
             border: none;
@@ -85,41 +86,70 @@
             transition: all 0.2s ease;
         }
 
-        .btn-primary {
-            background-color: #0284c7;
-            color: white;
-        }
+        .btn-primary { background-color: #0284c7; color: white; }
+        .btn-primary:hover { background-color: #0369a1; }
 
-        .btn-primary:hover {
-            background-color: #0369a1;
-        }
+        .btn-warning { background-color: #d97706; color: white; }
+        .btn-warning:hover { background-color: #b45309; }
 
-        .btn-success {
-            background-color: #16a34a;
-            color: white;
-        }
+        .btn-success { background-color: #16a34a; color: white; }
+        .btn-success:hover { background-color: #15803d; }
 
-        .btn-success:hover {
-            background-color: #15803d;
-        }
+        .btn-danger { background-color: #dc2626; color: white; }
+        .btn-danger:hover { background-color: #b91c1c; }
 
-        .btn-danger {
-            background-color: #dc2626;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #b91c1c;
-        }
-
-        /* Main Game Screen */
+        /* Game Section */
         .game-section {
             display: none;
             flex-direction: column;
             gap: 25px;
         }
 
-        /* Score Table Style */
+        /* Round Box Status */
+        .round-status-box {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #38bdf8;
+        }
+
+        .round-status-box h2 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        .inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .player-box {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #334155;
+        }
+
+        .player-box .name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .player-box .current-bid {
+            font-size: 0.95rem;
+            color: #facc15;
+        }
+
+        /* Large Table View */
         .table-responsive {
             overflow-x: auto;
         }
@@ -128,7 +158,6 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 1.3rem;
         }
 
         th, td {
@@ -139,67 +168,18 @@
         th {
             background-color: #0f172a;
             color: #38bdf8;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
         }
 
-        tr:nth-child(even) {
-            background-color: #1e293b;
-        }
-
-        tr:nth-child(odd) {
-            background-color: #0f172a;
+        td {
+            font-size: 1.2rem;
         }
 
         .total-row {
             background-color: #0369a1 !important;
             font-weight: bold;
-            font-size: 1.5rem;
         }
 
-        /* Round Input Section */
-        .round-input-container {
-            background: #0f172a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-
-        .round-input-container h2 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #facc15;
-            text-align: center;
-        }
-
-        .inputs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .player-score-input {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #1e293b;
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .player-score-input label {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        /* Display Mode Toggle for Large Screen View */
         .score-big {
             font-size: 2rem;
             font-weight: bold;
@@ -210,10 +190,10 @@
             color: #f87171;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            th, td { padding: 8px; font-size: 1rem; }
-            .total-row { font-size: 1.1rem; }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
         }
     </style>
 </head>
@@ -224,64 +204,65 @@
     <div class="container">
         <!-- Step 1: Player Name Entry -->
         <div id="setupSection" class="setup-section">
-            <h2 style="text-align: center; color: #38bdf8; margin-bottom: 10px;">Player Names Entry</h2>
+            <h2 style="text-align: center; color: #38bdf8;">Khiladi Haruko Naam Insert Garnuhos</h2>
             <div class="input-group">
-                <label>Player 1 Name:</label>
+                <label>Player 1:</label>
                 <input type="text" id="p1" value="Player 1">
             </div>
             <div class="input-group">
-                <label>Player 2 Name:</label>
+                <label>Player 2:</label>
                 <input type="text" id="p2" value="Player 2">
             </div>
             <div class="input-group">
-                <label>Player 3 Name:</label>
+                <label>Player 3:</label>
                 <input type="text" id="p3" value="Player 3">
             </div>
             <div class="input-group">
-                <label>Player 4 Name:</label>
+                <label>Player 4:</label>
                 <input type="text" id="p4" value="Player 4">
             </div>
-            <button class="btn btn-primary" onclick="startGame()" style="margin-top: 15px;">Game Start Garna</button>
+            <button class="btn btn-primary" onclick="startGame()">Game Start Garnuhos</button>
         </div>
 
-        <!-- Step 2: Main Game Dashboard -->
+        <!-- Step 2: Main Dashboard -->
         <div id="gameSection" class="game-section">
             
-            <!-- Round Input Form -->
-            <div class="round-input-container">
-                <h2 id="roundTitle">Round 1 Score Entry</h2>
+            <!-- Dynamic Form (Bid Entry -> Play -> Made Entry) -->
+            <div class="round-status-box">
+                <h2 id="roundTitle">Round 1: Bid Entry</h2>
                 
                 <div class="inputs-grid" id="inputFields">
-                    <!-- Dynamic inputs generated here -->
+                    <!-- Dynamic fields will be inserted here -->
                 </div>
 
-                <button class="btn btn-success" style="width: 100%;" onclick="addRoundScore()">Score Save Garna</button>
+                <div id="actionButtonContainer">
+                    <!-- Dynamic action button -->
+                </div>
             </div>
 
-            <!-- Scoreboard Table -->
+            <!-- Score Table -->
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr id="tableHeader">
                             <th>Round</th>
-                            <!-- Player names will go here -->
+                            <!-- Names -->
                         </tr>
                     </thead>
                     <tbody id="scoreTableBody">
-                        <!-- Round scores will go here -->
+                        <!-- Scores history -->
                     </tbody>
                     <tfoot>
                         <tr class="total-row" id="totalRow">
                             <td>TOTAL</td>
-                            <!-- Total scores will go here -->
+                            <!-- Total Scores -->
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <!-- Controls (Again Play & Reset) -->
             <div class="controls">
-                <button class="btn btn-danger" onclick="resetGame()">Again Play (Restart Game)</button>
+                <button class="btn btn-danger" style="width: 100%;" onclick="resetGame()">Again Play (New Game)</button>
             </div>
 
         </div>
@@ -290,8 +271,9 @@
     <script>
         let players = [];
         let currentRound = 1;
-        let scores = []; // Array to store round-wise scores for each player
+        let currentBids = [0, 0, 0, 0];
         let totals = [0, 0, 0, 0];
+        let gameState = 'BIDDING'; // 'BIDDING' or 'RESULT'
 
         function startGame() {
             const p1 = document.getElementById('p1').value.trim() || 'Player 1';
@@ -301,93 +283,129 @@
 
             players = [p1, p2, p3, p4];
 
-            // Render Table Headers
+            // Setup Header Table
             const headerRow = document.getElementById('tableHeader');
             headerRow.innerHTML = '<th>Round</th>';
             players.forEach(name => {
                 headerRow.innerHTML += `<th>${name}</th>`;
             });
 
-            // Show input form for the current round
-            renderInputFields();
-
-            // Render initial total row
             updateTotalRow();
 
-            // Toggle screens
             document.getElementById('setupSection').style.display = 'none';
             document.getElementById('gameSection').style.display = 'flex';
+
+            startBiddingPhase();
         }
 
-        function renderInputFields() {
-            document.getElementById('roundTitle').innerText = `Round ${currentRound} Score Entry`;
+        // STEP 1: Bid/Call garni screen
+        function startBiddingPhase() {
+            gameState = 'BIDDING';
+            document.getElementById('roundTitle').innerText = `Round ${currentRound} : Bid (Call) Entry Garnuhos`;
+
             const container = document.getElementById('inputFields');
             container.innerHTML = '';
 
-            players.forEach((player, index) => {
+            players.forEach((player, i) => {
                 container.innerHTML += `
-                    <div class="player-score-input">
-                        <label>${player}</label>
-                        <input type="number" id="call_${index}" placeholder="Call (Bid)" min="1" max="13" style="margin-bottom: 5px;">
-                        <input type="number" id="made_${index}" placeholder="Hands Made" min="0" max="13">
+                    <div class="player-box">
+                        <span class="name">${player}</span>
+                        <input type="number" id="bid_${i}" placeholder="Bid (1-13)" min="1" max="13">
                     </div>
                 `;
             });
+
+            document.getElementById('actionButtonContainer').innerHTML = `
+                <button class="btn btn-warning" style="width: 100%;" onclick="submitBids()">Bid Save Garera Khelna Jani 🃏</button>
+            `;
         }
 
-        function addRoundScore() {
+        // Save Bids and Change state
+        function submitBids() {
+            let tempBids = [];
+            for (let i = 0; i < 4; i++) {
+                const val = parseInt(document.getElementById(`bid_${i}`).value);
+                if (isNaN(val) || val < 1 || val > 13) {
+                    alert('Kripaya sabai khiladi ko valid Bid (1 bata 13 samma) entry garnuhos!');
+                    return;
+                }
+                tempBids.push(val);
+            }
+
+            currentBids = tempBids;
+            startResultPhase();
+        }
+
+        // STEP 2: Khelisake pachi Made/Hands Entry garni screen
+        function startResultPhase() {
+            gameState = 'RESULT';
+            document.getElementById('roundTitle').innerText = `Round ${currentRound} : Khel Sakiye Pachi Haath (Made) Entry Garnuhos`;
+
+            const container = document.getElementById('inputFields');
+            container.innerHTML = '';
+
+            players.forEach((player, i) => {
+                container.innerHTML += `
+                    <div class="player-box">
+                        <span class="name">${player}</span>
+                        <span class="current-bid">Bid: ${currentBids[i]}</span>
+                        <input type="number" id="made_${i}" placeholder="Hands Made (0-13)" min="0" max="13">
+                    </div>
+                `;
+            });
+
+            document.getElementById('actionButtonContainer').innerHTML = `
+                <button class="btn btn-success" style="width: 100%;" onclick="submitResults()">Final Score Save Garnuhos 🎯</button>
+            `;
+        }
+
+        // Save Made Hands & Calculate Score
+        function submitResults() {
             let roundScores = [];
 
             for (let i = 0; i < 4; i++) {
-                const callVal = parseFloat(document.getElementById(`call_${i}`).value);
-                const madeVal = parseFloat(document.getElementById(`made_${i}`).value);
+                const callVal = currentBids[i];
+                const madeVal = parseInt(document.getElementById(`made_${i}`).value);
 
-                if (isNaN(callVal) || isNaN(madeVal)) {
-                    alert('Kripaya sabai khiladi ko Call ra Made hands entry garnuhos!');
+                if (isNaN(madeVal) || madeVal < 0 || madeVal > 13) {
+                    alert('Kripaya sabai khiladi ko jiteko Haath (Made) entry garnuhos!');
                     return;
                 }
 
                 let score = 0;
-
-                // Call break rule logic
+                // Score calculation logic
                 if (madeVal < callVal) {
-                    // Minus score if hands made is less than call
-                    score = -callVal;
+                    score = -callVal; // Bid nappugda minus score
                 } else {
-                    // Full call score + 0.1 for each extra hand
-                    score = callVal + ((madeVal - callVal) * 0.1);
+                    score = callVal + ((madeVal - callVal) * 0.1); // Extra hand point 0.1
                 }
 
-                // Round to 1 decimal place to avoid floating point issues
                 score = Math.round(score * 10) / 10;
-
                 roundScores.push(score);
+
                 totals[i] += score;
                 totals[i] = Math.round(totals[i] * 10) / 10;
             }
 
-            // Save to history
-            scores.push(roundScores);
-
-            // Add row to table
+            // Display Score in Table
             const tbody = document.getElementById('scoreTableBody');
             const row = document.createElement('tr');
             
             let rowContent = `<td><strong>R${currentRound}</strong></td>`;
-            roundScores.forEach(s => {
+            roundScores.forEach((s, idx) => {
                 const scoreClass = s < 0 ? 'score-negative' : '';
-                rowContent += `<td class="${scoreClass}">${s > 0 ? '+' + s : s}</td>`;
+                rowContent += `<td class="${scoreClass}">${s > 0 ? '+' + s : s} <br><small style="color:#aaa; font-size: 0.8rem;">(Bid: ${currentBids[idx]})</small></td>`;
             });
 
             row.innerHTML = rowContent;
             tbody.appendChild(row);
 
-            // Update Total
+            // Update Total Scores Display
             updateTotalRow();
 
-            // Increment Round
+            // Next Round Update
             currentRound++;
-            renderInputFields();
+            startBiddingPhase();
         }
 
         function updateTotalRow() {
@@ -401,11 +419,9 @@
         }
 
         function resetGame() {
-            if (confirm("Kyu tapai game feri naya bata shuru (Restart) garna chhanhunu hunchha?")) {
+            if (confirm("Kyu tapai feri naya game shuru garna chhanhunu hunchha?")) {
                 currentRound = 1;
-                scores = [];
                 totals = [0, 0, 0, 0];
-
                 document.getElementById('scoreTableBody').innerHTML = '';
                 document.getElementById('setupSection').style.display = 'flex';
                 document.getElementById('gameSection').style.display = 'none';
